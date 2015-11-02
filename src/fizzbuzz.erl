@@ -10,25 +10,29 @@
 -author("raphael").
 
 %% API
--export([fizzbuzz/1, print_fizzbuzz/1]).
+-export([fizzbuzz/1, fizzbuzzz/1]).
+
+-define(is_modulo(Input, Divider), Input rem Divider == 0).
+-define(is_modulo3(Input), Input rem 3 == 0).
+-define(is_modulo5(Input), is_modulo(Input, 5)).
+-define(is_modulo15(Input), is_modulo(Input, 15)).
 
 fizzbuzz(0) ->
   0;
-fizzbuzz(X) when X rem 15 =:= 0 ->
+fizzbuzz(X) when ?is_modulo(X, 15) ->
   fizzbuzz;
-fizzbuzz(X) when X rem 3 == 0 ->
+fizzbuzz(X) when ?is_modulo3(X) ->
   fizz;
-fizzbuzz(X) when X rem 5 == 0 ->
+fizzbuzz(X) when ?is_modulo(X, 5) ->
   buzz;
 fizzbuzz(X) ->
   X.
 
 
-
-print_fizzbuzz([]) ->
+fizzbuzzz([]) ->
   [];
-print_fizzbuzz([Head | Rest]) ->
-  [fizzbuzz(Head) | print_fizzbuzz(Rest)].
+fizzbuzzz([Head | Rest]) ->
+  [fizzbuzz(Head) | fizzbuzzz(Rest)].
 
 
 
