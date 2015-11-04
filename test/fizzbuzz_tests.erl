@@ -13,7 +13,7 @@
 
 
 fizzbuzz_0_test() ->
-  ?assert(0 == fizzbuzz:fizzbuzz(0)).
+  ?assert(1 == fizzbuzz:fizzbuzz(0)).
 
 fizzbuzz_fizz_test() ->
   ?assert(fizz == fizzbuzz:fizzbuzz(3)).
@@ -31,7 +31,7 @@ fizzbuzz_empty_list_test() ->
   ?assert([] == fizzbuzz:fizzbuzzz([])).
 
 fizzbuzz_one_item_list_test() ->
-  ?assertEqual([0], fizzbuzz:fizzbuzzz([0])).
+  ?assertEqual([2], fizzbuzz:fizzbuzzz([0])).
 
 fizzbuzz_four_item_whit_fizz_list_test() ->
   ?assertEqual([0, 1, 2, fizz], fizzbuzz:fizzbuzzz([0, 1, 2, 3])).
