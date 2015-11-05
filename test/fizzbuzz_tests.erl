@@ -13,7 +13,7 @@
 
 
 fizzbuzz_0_test() ->
-  ?assert(1 == fizzbuzz:fizzbuzz(0)).
+  ?assert(0 == fizzbuzz:fizzbuzz(0)).
 
 fizzbuzz_fizz_test() ->
   ?assert(fizz == fizzbuzz:fizzbuzz(3)).
