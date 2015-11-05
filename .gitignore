@@ -3,3 +3,6 @@ out
 *.dump
 *.ideq
 *.idea
+.eunit/
+.rebar/
+ebin/
