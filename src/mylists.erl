@@ -10,9 +10,18 @@
 -author("raphael").
 
 %% API
--export([reverse/1]).
+-export([reverse/1, max/1]).
 
 reverse([]) ->
   [];
 reverse([First | Rest]) ->
   reverse(Rest) ++ [First].
+
+
+max([First]) ->
+  First;
+max([First, Second | Tail]) ->
+  if
+    First > Second -> max([First | Tail]);
+    true -> max([Second | Tail])
+  end.

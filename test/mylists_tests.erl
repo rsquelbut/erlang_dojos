@@ -16,4 +16,10 @@ reverse_empty_list_test() ->
   ?assertEqual([], mylists:reverse([])).
 
 reverse_3_items_list_test() ->
-  ?assertEqual([3, 2, 1], mylists:reverse([1, 2, 3])).
+  ?assertEqual([3, a, 1], mylists:reverse([1, a, 3])).
+
+max_in_1_item_list_test() ->
+  ?assertEqual(a, mylists:max([a])).
+
+max_in_lists_test() ->
+  ?assertEqual(a, mylists:max([1, a, 3])).
