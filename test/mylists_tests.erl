@@ -23,3 +23,6 @@ max_in_1_item_list_test() ->
 
 max_in_lists_test() ->
   ?assertEqual(a, mylists:max([1, a, 3])).
+
+min_and_max_test() ->
+  ?assertEqual({1, 10}, mylists:min_max([4, 1, 7, 3, 9, 10])).
