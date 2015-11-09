@@ -10,7 +10,7 @@
 -author("raphael").
 
 %% API
--export([reverse/1, max/1, min/1, min_max/1, sort_desc/1]).
+-export([reverse/1, max/1, min/1, min_max/1, sort_desc/1, sort_asc/1]).
 
 reverse([]) ->
   [];
@@ -48,5 +48,8 @@ sort_desc([Single]) ->
 sort_desc(List) ->
   Max = max(List),
   [Max | sort_desc(lists:delete(Max, List))].
+
+sort_asc(List) ->
+  reverse(sort_desc(List)).
 
 

@@ -34,3 +34,7 @@ list_sorted_desc_test() ->
 %%item_sorted_desc_test() ->
 %%  ?assertEqual([[a, a], [0, 0], {a, a}, {0, 0}, a, 0],
 %%    mylists:sort_desc(item)).
+
+list_sorted_asc_test() ->
+  ?assertEqual([0, a, {0, 0}, {a, a}, [0, 0], [a, a]],
+    mylists:sort_asc([a, 0, {a, a}, [0, 0], {0, 0}, [a, a]])).
