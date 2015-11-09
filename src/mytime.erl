@@ -10,7 +10,7 @@
 -author("raphael").
 
 %% API
--export([swedish_date/0,swedish_date/1]).
+-export([swedish_date/0, swedish_date/1]).
 
 
 swedish_date() ->

@@ -18,12 +18,12 @@ reverse([First | Rest]) ->
   reverse(Rest) ++ [First].
 
 
-max([First]) ->
-  First;
+max([One]) ->
+  One;
 max([First, Second | Tail]) when First >= Second ->
   max([First | Tail]);
-max([First, Second | Tail]) when First < Second ->
-  max([Second | Tail]).
+max([_ | Tail]) ->
+  max(Tail).
 
 min([One]) ->
   One;
