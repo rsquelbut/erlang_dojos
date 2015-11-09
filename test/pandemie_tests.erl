@@ -12,17 +12,12 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("../src/pandemie.hrl").
 
-should_infect_city_that_are_not_infected_test() ->
+should_fail_when_infecting_not_a_city_test() ->
+  ?assertEqual(not_a_city, pandemie:infect(ersatz)).
+
+should_augment_infection_level_when_city_will_not_explode_test() ->
   Atlanta = #city{name = atlanta},
   ?assertEqual(#city{name = atlanta, infectionLevel = 1}, pandemie:infect(Atlanta)).
-
-should_infect_city_that_are_infected_once_test() ->
-  Atlanta = #city{name = atlanta, infectionLevel = 1},
-  ?assertEqual(#city{name = atlanta, infectionLevel = 2}, pandemie:infect(Atlanta)).
-
-should_infect_city_that_are_infected_twice_test() ->
-  Atlanta = #city{name = atlanta, infectionLevel = 2},
-  ?assertEqual(#city{name = atlanta, infectionLevel = 3}, pandemie:infect(Atlanta)).
 
 should_explode_when_infect_city_already_infected_thee_times_test() ->
   Atlanta = #city{name = atlanta, infectionLevel = 3},
