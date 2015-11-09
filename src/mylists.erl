@@ -10,7 +10,7 @@
 -author("raphael").
 
 %% API
--export([reverse/1, max/1, min/1, min_max/1]).
+-export([reverse/1, max/1, min/1, min_max/1, sort_desc/1]).
 
 reverse([]) ->
   [];
@@ -20,11 +20,10 @@ reverse([First | Rest]) ->
 
 max([First]) ->
   First;
-max([First, Second | Tail]) ->
-  if
-    First >= Second -> max([First | Tail]);
-    true -> max([Second | Tail])
-  end.
+max([First, Second | Tail]) when First >= Second ->
+  max([First | Tail]);
+max([First, Second | Tail]) when First < Second ->
+  max([Second | Tail]).
 
 min([One]) ->
   One;
@@ -35,19 +34,19 @@ min([First, Second | Tail]) ->
   end.
 
 min_max([One]) ->
-  {One,One};
+  {One, One};
 min_max(List) ->
-  {min(List),max(List)}.
+  {min(List), max(List)}.
 
+-spec sort_desc(List) -> SortedList when
+  List :: [A],
+  SortedList :: [A],
+  A :: term().
 
-%%order_decroissant([First , Second]) ->
-%%  if
-%%    First > Second -> [First , Second];
-%%    true -> [Second , First]
-%%  end.
-%%order_decroissant([First , Second | Tail) ->
-%%  if
-%%    First > Second -> order_decroissant()[First | Second];
-%%    true -> [Second | First]
-%%  end.
+sort_desc([Single]) ->
+  [Single];
+sort_desc(List) ->
+  Max = max(List),
+  [Max | sort_desc(lists:delete(Max, List))].
+
 

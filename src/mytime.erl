@@ -10,11 +10,13 @@
 -author("raphael").
 
 %% API
--export([swedish_date/0]).
+-export([swedish_date/0,swedish_date/1]).
 
 
 swedish_date() ->
-  {Year, Month, Day} = date(),
+  swedish_date(date()).
+
+swedish_date({Year,Month,Day}) ->
   Yy = string:right(integer_to_list(Year),2,$0),
   Mm = string:right(integer_to_list(Month),2,$0),
   Dd = string:right(integer_to_list(Day),2,$0),

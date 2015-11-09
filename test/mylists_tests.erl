@@ -26,3 +26,11 @@ max_in_lists_test() ->
 
 min_and_max_test() ->
   ?assertEqual({1, 10}, mylists:min_max([4, 1, 7, 3, 9, 10])).
+
+list_sorted_desc_test() ->
+  ?assertEqual([[a, a], [0, 0], {a, a}, {0, 0}, a, 0],
+    mylists:sort_desc([a, 0, {0, 0}, {a, a}, [0, 0], [a, a]])).
+
+%%item_sorted_desc_test() ->
+%%  ?assertEqual([[a, a], [0, 0], {a, a}, {0, 0}, a, 0],
+%%    mylists:sort_desc(item)).

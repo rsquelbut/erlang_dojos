@@ -20,3 +20,6 @@ circle_perimeter_test() ->
 triangle_perimeter_test() ->
   ?assertEqual(3, mathStuff:perimeter({triangle, 1, 1, 1})).
 
+unknown_perimeter_test() ->
+  ?assertError(not_implemented, mathStuff:perimeter({unknown, 1})).
+
