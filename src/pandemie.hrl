@@ -10,3 +10,6 @@
 
 -record(city, {name, infectionLevel = 0}).
 -record(propagate, {city}).
+
+-record(link, {city1, city2}).
+

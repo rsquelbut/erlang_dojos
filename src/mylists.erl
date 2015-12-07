@@ -43,8 +43,8 @@ min_max(List) ->
   SortedList :: [A],
   A :: term().
 
-sort_desc([Single]) ->
-  [Single];
+sort_desc([]) ->
+  [];
 sort_desc(List) ->
   Max = max(List),
   [Max | sort_desc(lists:delete(Max, List))].
