@@ -35,22 +35,20 @@ findNeighbours([_ | Rest], City) ->
 propagate([], _) ->
   [];
 propagate(World, City) ->
-%%  [update(Head, City) | propagate(Rest, City)].
   Neighbours = findNeighbours(World, City),
-  update(World, Neighbours).
+  infectCities(World, Neighbours).
 
-update(World, [Neighbour]) ->
-  filterWorld(World,Neighbour);
-update(World, [Head | Tail]) ->
-  update(filterWorld(World,Head),Tail).
+infectCities(World, [Neighbour]) ->
+  infectACityInWorld(World, Neighbour);
+infectCities(World, [Head | Tail]) ->
+  infectCities(infectACityInWorld(World, Head), Tail).
 
-filterWorld(World, CityToInfect) ->
-  lists:map(fun(Link) -> updateOne(Link,CityToInfect) end, World)
-.
+infectACityInWorld(World, CityToInfect) ->
+  lists:map(fun(Link) -> updateOne(Link, CityToInfect) end, World).
+
 updateOne(Link, City) when Link#link.city2 == City ->
   Link#link{city2 = infect(Link#link.city2)};
 updateOne(Link, City) when Link#link.city1 == City ->
   Link#link{city1 = infect(Link#link.city1)};
 updateOne(Link, _) ->
-  Link
-.
+  Link.

@@ -41,26 +41,44 @@ should_find_no_neighbours_in_1_link_test() ->
   ?assertEqual([], pandemie:findNeighbours([LinkLisbonneMadrid], Paris)).
 
 should_find_neighbours_test() ->
+%%  Cities
   Madrid = #city{name = madrid},
   Paris = #city{name = paris},
   Lisbonne = #city{name = lisbonne},
   Bruxelles = #city{name = bruxelles},
+%%  Links
   LinkParisMadrid = #link{city1 = Paris, city2 = Madrid},
   LinkLisbonneMadrid = #link{city1 = Lisbonne, city2 = Madrid},
   LinkParisBruxelles = #link{city1 = Bruxelles, city2 = Paris},
-  ?assertEqual([Madrid, Bruxelles], pandemie:findNeighbours(
+
+  Actual = pandemie:findNeighbours(
     [LinkParisMadrid,
       LinkParisBruxelles,
-      LinkLisbonneMadrid], Paris)).
+      LinkLisbonneMadrid], Paris),
+
+  Expected = [Madrid, Bruxelles],
+
+  ?assertEqual(Expected, Actual).
 
 should_propagate_to_neighbours_test() ->
-  Madrid = #city{name = madrid},
+%%  CITIES
+  Madrid = #city{name = madrid, infectionLevel = 2},
   Paris = #city{name = paris, infectionLevel = 3},
   Lisbonne = #city{name = lisbonne},
+  Bruxelles = #city{name = bruxelles},
+%%  WORLD
   LinkParisMadrid = #link{city1 = Paris, city2 = Madrid},
   LinkLisbonneMadrid = #link{city1 = Lisbonne, city2 = Madrid},
-  ?assertEqual([#link{city1 = #city{name = paris, infectionLevel = 3}, city2 = #city{name = madrid, infectionLevel = 1}},
-    #link{city1 = #city{name = lisbonne, infectionLevel = 0}, city2 = #city{name = madrid, infectionLevel = 1}}],
-    pandemie:propagate([LinkParisMadrid, LinkLisbonneMadrid], Paris))
-  .
+  LinkBruxellesParis = #link{city1 = Bruxelles, city2 = Paris},
+
+  Actual = pandemie:propagate([LinkParisMadrid, LinkLisbonneMadrid, LinkBruxellesParis], Paris),
+
+  Expected = [#link{city1 = #city{name = paris, infectionLevel = 3},
+    city2 = #city{name = madrid, infectionLevel = 3}},
+    #link{city1 = #city{name = lisbonne},
+      city2 = #city{name = madrid, infectionLevel = 3}},
+    #link{city1 = #city{name = bruxelles, infectionLevel = 1},
+      city2 = #city{name = paris, infectionLevel = 3}}],
+
+  ?assertEqual(Expected, Actual).
 
