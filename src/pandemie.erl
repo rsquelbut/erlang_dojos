@@ -10,7 +10,7 @@
 -author("raphael").
 
 %% API
--export([infect/1, findNeighbours/2, propagate/2]).
+-export([infect/1, findNeighbours/2, propagate/2, retrieveDistinctsCities/1]).
 -include_lib("pandemie.hrl").
 
 -define(will_explode(City), City#city.infectionLevel >= 3).
@@ -45,6 +45,10 @@ infectCities(World, [Head | Tail]) ->
 
 infectACityInWorld(World, CityToInfect) ->
   lists:map(fun(Link) -> updateOne(Link, CityToInfect) end, World).
+
+retrieveDistinctsCities(World) ->
+  lists:usort(fun(A,B) -> A =< B end,lists:foldl(fun(Link, AccIn) -> AccIn ++ [Link#link.city1] ++ [Link#link.city2] end,[],World))
+.
 
 updateOne(Link, City) when Link#link.city2 == City ->
   Link#link{city2 = infect(Link#link.city2)};

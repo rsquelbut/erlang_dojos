@@ -82,3 +82,44 @@ should_propagate_to_neighbours_test() ->
 
   ?assertEqual(Expected, Actual).
 
+%% should_propagate_recursively_test() ->
+%% %%  CITIES
+%%   Madrid = #city{name = madrid, infectionLevel = 3},
+%%   Paris = #city{name = paris, infectionLevel = 3},
+%%   Lisbonne = #city{name = lisbonne},
+%%   Bruxelles = #city{name = bruxelles},
+%% %%  WORLD
+%%   LinkParisMadrid = #link{city1 = Paris, city2 = Madrid},
+%%   LinkLisbonneMadrid = #link{city1 = Lisbonne, city2 = Madrid},
+%%   LinkBruxellesParis = #link{city1 = Bruxelles, city2 = Paris},
+%%
+%%   Actual = pandemie:propagate([LinkParisMadrid, LinkLisbonneMadrid, LinkBruxellesParis], Paris),
+%%
+%%   Expected = [#link{city1 = #city{name = paris, infectionLevel = 3},
+%%     city2 = #city{name = madrid, infectionLevel = 3}},
+%%     #link{city1 = #city{name = lisbonne, infectionLevel = 1},
+%%       city2 = #city{name = madrid, infectionLevel = 3}},
+%%     #link{city1 = #city{name = bruxelles, infectionLevel = 1},
+%%       city2 = #city{name = paris, infectionLevel = 3}}],
+%%
+%%   ?assertEqual(Expected, Actual).
+
+should_fetch_distincts_cities_in_a_world_test() ->
+  %%  CITIES
+  Madrid = #city{name = madrid, infectionLevel = 3},
+  Paris = #city{name = paris, infectionLevel = 3},
+  Lisbonne = {propagate,#city{name = lisbonne}},
+  Bruxelles = #city{name = bruxelles},
+%%  WORLD
+  LinkParisMadrid = #link{city1 = Paris, city2 = Madrid},
+  LinkLisbonneMadrid = #link{city1 = Lisbonne, city2 = Madrid},
+  LinkBruxellesParis = #link{city1 = Bruxelles, city2 = Paris},
+
+  Actual = pandemie:retrieveDistinctsCities([LinkParisMadrid, LinkLisbonneMadrid, LinkBruxellesParis]),
+  ?assertEqual([
+    {propagate,#city{name = lisbonne}},
+    #city{name = bruxelles},
+    #city{name = madrid, infectionLevel = 3},
+    #city{name = paris, infectionLevel = 3}
+  ], Actual)
+  .
