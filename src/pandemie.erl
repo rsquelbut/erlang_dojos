@@ -18,12 +18,18 @@
 infect(City) when not is_record(City, city) ->
   not_a_city;
 infect(City) when ?will_explode(City) ->
-  {propagation, City};
+  #propagate{city=City};
 infect(City) ->
   City#city{infectionLevel = City#city.infectionLevel + 1}.
 
 findNeighbours([], _) ->
   [];
+findNeighbours(World, Propagation) when is_record(Propagation#link.city1,propagate) ->
+  coucou ;
+  %findNeighbours(World,Propagation#link.city1#propagate.city);
+findNeighbours(World, Propagation) when is_record(Propagation#link.city2,propagate) ->
+  salut;
+  %findNeighbours(World,Propagation#link.city2#propagate.city);
 findNeighbours([Head | Rest], City) when Head#link.city1 == City ->
   [Head#link.city2 | findNeighbours(Rest, City)];
 findNeighbours([Head | Rest], City) when Head#link.city2 == City ->
@@ -34,10 +40,12 @@ findNeighbours([_ | Rest], City) ->
 
 propagate([], _) ->
   [];
-propagate(World, City) ->
+propagate(World, City)  ->
   Neighbours = findNeighbours(World, City),
-  infectCities(World, Neighbours).
-
+  infectCities(World, Neighbours)
+  .
+infectCities(_, []) ->
+  pouet;
 infectCities(World, [Neighbour]) ->
   infectACityInWorld(World, Neighbour);
 infectCities(World, [Head | Tail]) ->
@@ -47,7 +55,14 @@ infectACityInWorld(World, CityToInfect) ->
   lists:map(fun(Link) -> updateOne(Link, CityToInfect) end, World).
 
 retrieveDistinctsCities(World) ->
-  lists:usort(fun(A,B) -> A =< B end,lists:foldl(fun(Link, AccIn) -> AccIn ++ [Link#link.city1] ++ [Link#link.city2] end,[],World))
+  lists:usort(
+    fun(A,B) -> A =< B end,
+    lists:foldl(
+      fun(Link, AccIn) -> AccIn ++ [Link#link.city1] ++ [Link#link.city2] end,
+      [],
+      World
+    )
+  )
 .
 
 updateOne(Link, City) when Link#link.city2 == City ->
