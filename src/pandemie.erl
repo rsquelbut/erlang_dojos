@@ -10,53 +10,50 @@
 -author("raphael").
 
 %% API
--export([infect/1, findNeighbours/2, propagate/2, retrieveDistinctsCities/1]).
+-export([infect/1, findNeighbours/2, propagate/3, retrieveDistinctsCities/1]).
 -include_lib("pandemie.hrl").
 
 -define(will_explode(City), City#city.infectionLevel >= 3).
 
 infect(City) when not is_record(City, city) ->
   not_a_city;
-infect(City) when ?will_explode(City) ->
-  #propagate{city=City};
 infect(City) ->
-  City#city{infectionLevel = City#city.infectionLevel + 1}.
-
+  case City#city.infectionLevel of
+    3 -> {outbreak, City};
+    _ -> {ok, City#city{infectionLevel = City#city.infectionLevel + 1}}
+  end
+.
 findNeighbours([], _) ->
   [];
-findNeighbours(World, Propagation) when is_record(Propagation#link.city1,propagate) ->
-  coucou ;
-  %findNeighbours(World,Propagation#link.city1#propagate.city);
-findNeighbours(World, Propagation) when is_record(Propagation#link.city2,propagate) ->
-  salut;
-  %findNeighbours(World,Propagation#link.city2#propagate.city);
-findNeighbours([Head | Rest], City) when Head#link.city1 == City ->
-  [Head#link.city2 | findNeighbours(Rest, City)];
-findNeighbours([Head | Rest], City) when Head#link.city2 == City ->
-  [Head#link.city1 | findNeighbours(Rest, City)];
+findNeighbours([{City1, City2} | Rest], City) when City1 == City ->
+  [City2 | findNeighbours(Rest, City)];
+findNeighbours([{City1, City2} | Rest], City) when City2 == City ->
+  [City1 | findNeighbours(Rest, City)];
 findNeighbours([_ | Rest], City) ->
   findNeighbours(Rest, City).
 
 
-propagate([], _) ->
-  [];
-propagate(World, City)  ->
-  Neighbours = findNeighbours(World, City),
-  infectCities(World, Neighbours)
-  .
-infectCities(_, []) ->
-  pouet;
-infectCities(World, [Neighbour]) ->
-  infectACityInWorld(World, Neighbour);
-infectCities(World, [Head | Tail]) ->
-  infectCities(infectACityInWorld(World, Head), Tail).
+propagate(Links, Cities, CityName) ->
+  Neighbours = findNeighbours(Links, CityName),
+  infectCities(Cities, Neighbours)
+.
 
-infectACityInWorld(World, CityToInfect) ->
-  lists:map(fun(Link) -> updateOne(Link, CityToInfect) end, World).
+infectCities(Cities, []) ->
+  Cities;
+infectCities(Cities, [ToInfect | Tail]) ->
+  {[City], NotSatisfying} = lists:partition(fun(#city{name = Name}) -> Name == ToInfect end, Cities),
+  case infect(City) of
+    {ok, NewCity} ->
+      [NewCity | infectCities(NotSatisfying, Tail)]
+%%    {outbreak, NewCity} ->
+%%>>>
+%%      [NewCity | infectCities(NotSatisfying, Tail)]
+  end
+.
 
 retrieveDistinctsCities(World) ->
   lists:usort(
-    fun(A,B) -> A =< B end,
+    fun(A, B) -> A =< B end,
     lists:foldl(
       fun(Link, AccIn) -> AccIn ++ [Link#link.city1] ++ [Link#link.city2] end,
       [],
@@ -65,9 +62,4 @@ retrieveDistinctsCities(World) ->
   )
 .
 
-updateOne(Link, City) when Link#link.city2 == City ->
-  Link#link{city2 = infect(Link#link.city2)};
-updateOne(Link, City) when Link#link.city1 == City ->
-  Link#link{city1 = infect(Link#link.city1)};
-updateOne(Link, _) ->
-  Link.
+
